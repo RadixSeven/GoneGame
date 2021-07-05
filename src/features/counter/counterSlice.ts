@@ -26,6 +26,17 @@ export const incrementAsync = createAsyncThunk(
   }
 );
 
+export const autoIncrement = (amount: number, numTimes: number): AppThunk =>
+    (dispatch, getState) => {
+      dispatch(incrementByAmount(amount));
+      if(numTimes >= 2) {
+        setTimeout(() => {
+          dispatch(autoIncrement(amount, numTimes - 1))
+        }, 1500)
+      }
+    }
+
+
 export const counterSlice = createSlice({
   name: 'counter',
   initialState,

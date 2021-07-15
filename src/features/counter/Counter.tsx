@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  decrement, increment, incrementByAmount, incrementAsync, incrementIfOdd, selectCount, autoIncrement,
+  decrement,
+  increment,
+  incrementByAmount,
+  incrementAsync,
+  incrementIfOdd,
+  selectCount,
+  autoIncrement, selectTargetVisibility,
 } from './counterSlice';
 import styles from './Counter.module.css';
 import logo from "../../logo.svg";
 
 export function Counter() {
   const count = useAppSelector(selectCount);
+  const targetIsVisible = useAppSelector(selectTargetVisibility);
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
 
@@ -66,9 +73,9 @@ export function Counter() {
           Auto-increment 4 times
         </button>
       </div>
-      <div className={styles.row}>
-        <img src={logo} className={styles.fadeInImage} alt="This disappears and reappears" />
-      </div>
+      {targetIsVisible && <div className={styles.row}>
+            <img src={logo} className={styles.fadeInImage} alt="This disappears and reappears"/>
+      </div>}
     </div>
   );
 }

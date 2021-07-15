@@ -8,7 +8,7 @@ import {
   incrementAsync,
   incrementIfOdd,
   selectCount,
-  autoIncrement, selectTargetVisibility,
+  selectTargetVisibility, autoIncrement2,
 } from './counterSlice';
 import styles from './Counter.module.css';
 import logo from "../../logo.svg";
@@ -68,14 +68,22 @@ export function Counter() {
         </button>
         <button
             className={styles.button}
-            onClick={() => dispatch(autoIncrement(incrementValue, 4))}
+            onClick={() => dispatch(autoIncrement2({amount: incrementValue, numTimes:4}))}
         >
           Auto-increment 4 times
         </button>
       </div>
-      {targetIsVisible && <div className={styles.row}>
-            <img src={logo} className={styles.fadeInImage} alt="This disappears and reappears"/>
-      </div>}
+      <div className={styles.row}>
+        <DisappearingImage/>
+      </div>
     </div>
   );
+}
+
+function DisappearingImage(){
+  const targetIsVisible = useAppSelector(selectTargetVisibility);
+  return targetIsVisible ?
+      <img src={logo} className={styles.fadeInImage} alt="This disappears and reappears"/>
+ :
+      <img src={logo} className={styles.transparentImage} alt="This disappears and reappears"/>;
 }

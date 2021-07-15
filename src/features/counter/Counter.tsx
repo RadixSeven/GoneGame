@@ -5,6 +5,7 @@ import {
   decrement, increment, incrementByAmount, incrementAsync, incrementIfOdd, selectCount, autoIncrement,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import logo from "../../logo.svg";
 
 export function Counter() {
   const count = useAppSelector(selectCount);
@@ -14,6 +15,7 @@ export function Counter() {
   const incrementValue = Number(incrementAmount) || 0;
 
   return (
+
     <div>
       <div className={styles.row}>
         <button
@@ -63,6 +65,9 @@ export function Counter() {
         >
           Auto-increment 4 times
         </button>
+      </div>
+      <div className={styles.row}>
+        <img src={logo} className={styles.fadeInImage} alt="This disappears and reappears" />
       </div>
     </div>
   );

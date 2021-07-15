@@ -23,7 +23,6 @@
 
 .button {
   appearance: none;
-  background: none;
   font-size: 32px;
   padding-left: 12px;
   padding-right: 12px;
@@ -32,7 +31,7 @@
   color: rgb(112, 76, 182);
   padding-bottom: 4px;
   cursor: pointer;
-  background-color: rgba(112, 76, 182, 0.1);
+  background: rgba(112, 76, 182, 0.1) none;
   border-radius: 2px;
   transition: all 0.15s;
 }
@@ -73,7 +72,35 @@
 }
 
 .asyncButton:active:after {
-  width: 0%;
+  width: 0;
   opacity: 1;
   transition: 0s;
+}
+
+/* Here I use a camelCase name because webPack does not transform skewer-case names*/
+.fadeInImage {
+  animation: fadeIn 5s;
+  -webkit-animation: fadeIn 5s;
+  -moz-animation: fadeIn 5s;
+  -o-animation: fadeIn 5s;
+  -ms-animation: fadeIn 5s;
+}
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }

@@ -7,16 +7,16 @@ import {
   incrementByAmount,
   incrementAsync,
   incrementIfOdd,
-  selectCount,
-  selectTargetVisibility, autoIncrement2,
+  getCount,
+  getTargetIsVisible,
+  autoIncrement2, getSimulationIsRunning, clickedPlayButton, clickedPauseButton
 } from './counterSlice';
 import styles from './Counter.module.css';
-import logo from "../../logo.svg";
 import numbersSvg from "../../1121.svg";
 
 export function Counter() {
-  const count = useAppSelector(selectCount);
-  const targetIsVisible = useAppSelector(selectTargetVisibility);
+  const count = useAppSelector(getCount);
+  const simulationIsRunning = useAppSelector(getSimulationIsRunning);
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
 
@@ -73,6 +73,7 @@ export function Counter() {
         >
           Auto-increment 4 times
         </button>
+        {simulationIsRunning ? <PauseButton/> : <PlayButton/>}
       </div>
       <div className={styles.row}>
         <DisappearingImage/>
@@ -81,8 +82,21 @@ export function Counter() {
   );
 }
 
+function SimpleButton(props:{onClick:Function, buttonText: string}) {
+  const dispatch = useAppDispatch();
+
+  return <button className={styles.button} onClick={() => dispatch(props.onClick())}>{props.buttonText}</button>
+}
+
+function PauseButton(){
+  return <SimpleButton onClick={clickedPauseButton} buttonText={"▌▌"}/>;
+}
+function PlayButton(){
+  return <SimpleButton onClick={clickedPlayButton} buttonText={"▶"}/>;
+}
+
 function DisappearingImage(){
-  const targetIsVisible = useAppSelector(selectTargetVisibility);
+  const targetIsVisible = useAppSelector(getTargetIsVisible);
   return targetIsVisible ?
       <img src={numbersSvg} className={styles.fadeInImage} alt="This disappears and reappears"/>
  :

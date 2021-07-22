@@ -12,6 +12,7 @@ import {
 } from './counterSlice';
 import styles from './Counter.module.css';
 import logo from "../../logo.svg";
+import numbersSvg from "../../1121.svg";
 
 export function Counter() {
   const count = useAppSelector(selectCount);
@@ -83,7 +84,7 @@ export function Counter() {
 function DisappearingImage(){
   const targetIsVisible = useAppSelector(selectTargetVisibility);
   return targetIsVisible ?
-      <img src={logo} className={styles.fadeInImage} alt="This disappears and reappears"/>
+      <img src={numbersSvg} className={styles.fadeInImage} alt="This disappears and reappears"/>
  :
-      <img src={logo} className={styles.transparentImage} alt="This disappears and reappears"/>;
+      <img src={numbersSvg} className={styles.transparentImage} alt="This disappears and reappears"/>;
 }

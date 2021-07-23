@@ -109,3 +109,9 @@
   opacity: 0;
   animation: none;
 }
+
+
+.opaqueImage {
+  opacity: 1;
+  animation: none;
+}

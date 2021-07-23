@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
@@ -7,20 +7,31 @@ import {
   incrementByAmount,
   incrementAsync,
   incrementIfOdd,
-  getCount,
-  getTargetIsVisible,
-  autoIncrement2, getSimulationIsRunning, clickedPlayButton, clickedPauseButton
+  autoIncrement2,
+  getSimulationIsRunning,
+  clickedPlayButton,
+  clickedPauseButton,
+  getImages,
+  getCurrentTime, millisecondsPassed
 } from './counterSlice';
 import styles from './Counter.module.css';
 import numbersSvg from "../../1121.svg";
 
 export function Counter() {
-  const count = useAppSelector(getCount);
   const simulationIsRunning = useAppSelector(getSimulationIsRunning);
+  const images = useAppSelector(getImages);
+  const curTime = useAppSelector(getCurrentTime);
+  const count = curTime;
   const dispatch = useAppDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
 
   const incrementValue = Number(incrementAmount) || 0;
+
+  // Call useEffect once to get the tick loop started
+  useEffect(
+  ()=>{dispatch(millisecondsPassed({numMs: 0}));}
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  ,[]);
 
   return (
 
@@ -76,7 +87,7 @@ export function Counter() {
         {simulationIsRunning ? <PauseButton/> : <PlayButton/>}
       </div>
       <div className={styles.row}>
-        <DisappearingImage/>
+        {images.map(i=><DisappearingImage key={i.key} x={i.x} visibility={i.timeToFinishFadeIn < curTime?(i.timeToStartFadeIn >= curTime?"fading":"gone"):"visible"}/>)}
       </div>
     </div>
   );
@@ -95,10 +106,11 @@ function PlayButton(){
   return <SimpleButton onClick={clickedPlayButton} buttonText={"▶"}/>;
 }
 
-function DisappearingImage(){
-  const targetIsVisible = useAppSelector(getTargetIsVisible);
-  return targetIsVisible ?
-      <img src={numbersSvg} className={styles.fadeInImage} alt="This disappears and reappears"/>
- :
-      <img src={numbersSvg} className={styles.transparentImage} alt="This disappears and reappears"/>;
+function DisappearingImage(props: {x: number, visibility: "fading"|"visible"|"gone"}){
+  // TODO use the x position
+  switch (props.visibility) {
+    case "fading": return <img src={numbersSvg} className={styles.fadeInImage} alt="This disappears and reappears"/>
+    case "visible": return <img src={numbersSvg} className={styles.opaqueImage} alt="This disappears and reappears"/>
+    case "gone": return <img src={numbersSvg} className={styles.transparentImage} alt="This disappears and reappears"/>
+  }
 }

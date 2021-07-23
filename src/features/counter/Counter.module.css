@@ -18,7 +18,7 @@
   padding-left: 16px;
   padding-right: 16px;
   margin-top: 2px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .button {
@@ -59,7 +59,7 @@
 }
 
 .asyncButton:after {
-  content: '';
+  content: "";
   background-color: rgba(112, 76, 182, 0.15);
   display: block;
   position: absolute;
@@ -86,30 +86,45 @@
   -ms-animation: fadeIn 5s;
 }
 @keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @-moz-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @-webkit-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @-o-keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .transparentImage {
   opacity: 0;
   animation: none;
 }
-
 
 .opaqueImage {
   opacity: 1;

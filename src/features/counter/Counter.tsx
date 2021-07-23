@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
   decrement,
   increment,
@@ -12,9 +12,10 @@ import {
   clickedPlayButton,
   clickedPauseButton,
   getImages,
-  getCurrentTime, millisecondsPassed
-} from './counterSlice';
-import styles from './Counter.module.css';
+  getCurrentTime,
+  millisecondsPassed,
+} from "./counterSlice";
+import styles from "./Counter.module.css";
 import numbersSvg from "../../1121.svg";
 
 export function Counter() {
@@ -23,18 +24,20 @@ export function Counter() {
   const curTime = useAppSelector(getCurrentTime);
   const count = curTime;
   const dispatch = useAppDispatch();
-  const [incrementAmount, setIncrementAmount] = useState('2');
+  const [incrementAmount, setIncrementAmount] = useState("2");
 
   const incrementValue = Number(incrementAmount) || 0;
 
   // Call useEffect once to get the tick loop started
   useEffect(
-  ()=>{dispatch(millisecondsPassed({numMs: 0}));}
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  ,[]);
+    () => {
+      dispatch(millisecondsPassed({ numMs: 0 }));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   return (
-
     <div>
       <div className={styles.row}>
         <button
@@ -73,44 +76,86 @@ export function Counter() {
           Add Async
         </button>
         <button
-            className={styles.button}
-            onClick={() => dispatch(incrementIfOdd(incrementValue))}
+          className={styles.button}
+          onClick={() => dispatch(incrementIfOdd(incrementValue))}
         >
           Add If Odd
         </button>
         <button
-            className={styles.button}
-            onClick={() => dispatch(autoIncrement2({amount: incrementValue, numTimes:4}))}
+          className={styles.button}
+          onClick={() =>
+            dispatch(autoIncrement2({ amount: incrementValue, numTimes: 4 }))
+          }
         >
           Auto-increment 4 times
         </button>
-        {simulationIsRunning ? <PauseButton/> : <PlayButton/>}
+        {simulationIsRunning ? <PauseButton /> : <PlayButton />}
       </div>
       <div className={styles.row}>
-        {images.map(i=><DisappearingImage key={i.key} x={i.x} visibility={i.timeToFinishFadeIn < curTime?(i.timeToStartFadeIn >= curTime?"fading":"gone"):"visible"}/>)}
+        {images.map((i) => (
+          <DisappearingImage
+            key={i.key}
+            x={i.x}
+            visibility={
+              i.timeToFinishFadeIn < curTime
+                ? i.timeToStartFadeIn >= curTime
+                  ? "fading"
+                  : "gone"
+                : "visible"
+            }
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-function SimpleButton(props:{onClick:Function, buttonText: string}) {
+function SimpleButton(props: { onClick: Function; buttonText: string }) {
   const dispatch = useAppDispatch();
 
-  return <button className={styles.button} onClick={() => dispatch(props.onClick())}>{props.buttonText}</button>
+  return (
+    <button className={styles.button} onClick={() => dispatch(props.onClick())}>
+      {props.buttonText}
+    </button>
+  );
 }
 
-function PauseButton(){
-  return <SimpleButton onClick={clickedPauseButton} buttonText={"▌▌"}/>;
+function PauseButton() {
+  return <SimpleButton onClick={clickedPauseButton} buttonText={"▌▌"} />;
 }
-function PlayButton(){
-  return <SimpleButton onClick={clickedPlayButton} buttonText={"▶"}/>;
+function PlayButton() {
+  return <SimpleButton onClick={clickedPlayButton} buttonText={"▶"} />;
 }
 
-function DisappearingImage(props: {x: number, visibility: "fading"|"visible"|"gone"}){
+function DisappearingImage(props: {
+  x: number;
+  visibility: "fading" | "visible" | "gone";
+}) {
   // TODO use the x position
   switch (props.visibility) {
-    case "fading": return <img src={numbersSvg} className={styles.fadeInImage} alt="This disappears and reappears"/>
-    case "visible": return <img src={numbersSvg} className={styles.opaqueImage} alt="This disappears and reappears"/>
-    case "gone": return <img src={numbersSvg} className={styles.transparentImage} alt="This disappears and reappears"/>
+    case "fading":
+      return (
+        <img
+          src={numbersSvg}
+          className={styles.fadeInImage}
+          alt="This disappears and reappears"
+        />
+      );
+    case "visible":
+      return (
+        <img
+          src={numbersSvg}
+          className={styles.opaqueImage}
+          alt="This disappears and reappears"
+        />
+      );
+    case "gone":
+      return (
+        <img
+          src={numbersSvg}
+          className={styles.transparentImage}
+          alt="This disappears and reappears"
+        />
+      );
   }
 }

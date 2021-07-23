@@ -72,7 +72,7 @@ const initialState: CounterState = {
     timeBetweenDisappearances: { min: 100, mean: 900, std: 1000 },
     fadeInTime: { min: 400, mean: 600, std: 200 },
     opaqueTime: { min: 0, mean: 200, std: 200 },
-  }
+  },
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -123,7 +123,7 @@ function* newImagesDisappearingAfter(
       timeToFinishFadeIn: disTime - opaque,
       timeToDisappear: disTime,
       x: randomOverlappingPosition(lastImageX, imageWidth, viewportWidth),
-      key: lastImageKey + 1
+      key: lastImageKey + 1,
     };
   }
   const maxTries = 20;
@@ -198,7 +198,7 @@ function fillUpImages(
         timeToFinishFadeIn: currentTime + 400,
         timeToDisappear: currentTime + 1400,
         x: 0,
-        key: 0
+        key: 0,
       };
 
   const newImages = RG.takeAll(
@@ -333,7 +333,8 @@ export const getImages = (state: RootState) => state.counter.images;
 
 export const getCurrentTime = (state: RootState) => state.counter.currentTime;
 
-export const getGenerationParams = (state: RootState) => state.counter.generationParams;
+export const getGenerationParams = (state: RootState) =>
+  state.counter.generationParams;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

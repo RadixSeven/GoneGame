@@ -31,7 +31,7 @@
      units="px"
      inkscape:zoom="3.1072952"
      inkscape:cx="45.698909"
-     inkscape:cy="71.283862"
+     inkscape:cy="71.283861"
      inkscape:window-width="2461"
      inkscape:window-height="1057"
      inkscape:window-x="91"
@@ -44,6 +44,13 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       id="rect848"
+       width="23.283333"
+       height="9.5249996"
+       x="0"
+       y="0"
+       style="fill:#ffffff;fill-opacity:0.75;stroke-width:0.264583" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.7px;line-height:1.25;font-family:'Comic Sans MS';-inkscape-font-specification:'Comic Sans MS, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"

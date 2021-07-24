@@ -16,6 +16,7 @@ import {
 import styles from "./GoneGameDisplay.module.css";
 import meditatorSvg from "../../meditator.svg";
 import { AppDispatch } from "../../app/store";
+import * as R from "ramda";
 
 /**
  * Adapted from
@@ -74,7 +75,7 @@ export function GoneGameDisplay() {
         {simulationIsRunning ? <PauseButton /> : <PlayButton />}
       </div>
       <div className={styles.row}>
-        {images.map((i: ImageProps) => (
+        {R.reverse(images).map((i: ImageProps) => (
           <DisappearingImage key={i.key} curTime={curTime} image={i} />
         ))}
       </div>

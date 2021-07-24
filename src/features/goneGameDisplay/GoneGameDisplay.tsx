@@ -84,6 +84,7 @@ export function GoneGameDisplay() {
       <div className={styles.row}>
         {R.reverse(images)
           .filter((i) => i.timeToStartFadeIn <= curTime)
+          .filter((i) => curTime < i.timeToDisappear)
           .map((i: ImageProps, idx, arr) => (
             <DisappearingImage
               key={i.key}
@@ -214,6 +215,7 @@ function DisappearingImage(props: {
   } else {
     return (
       <img
+        style={style}
         src={picture}
         className={styles.transparentImage}
         alt="This disappears and reappears"

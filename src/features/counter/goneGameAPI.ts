@@ -1,12 +1,6 @@
 // A mock function to mimic making an async request for data
 import * as R from "ramda";
 
-export function fetchCount(amount = 1) {
-  return new Promise<{ data: number }>((resolve) =>
-    setTimeout(() => resolve({ data: amount }), 500)
-  );
-}
-
 /**
  * Return the parameters mu and sigma to be passed to exp(normal_sample(mu, sigma)) to generate a sample
  * from a lognormal distribution with mean mean and standard deviation std
@@ -82,18 +76,4 @@ export function lognormal_sample(mean: number, std: number) {
   const normal_sample = chance.normal({ mean: mu, dev: sigma });
   //console.log(`Chance return ${normal_sample}`);
   return Math.exp(normal_sample);
-}
-
-/**
- * Return a promise that waits a random amount of time before resolving (using a lognormal distribution)
- * @param base The minimum amount of time to wait in milliseconds
- * @param mean The mean time to wait in addition to the minimum (in milliseconds)
- * @param std The standard deviation of the time to wait in addition to the minimum (in milliseconds)
- */
-export function waitRandomTime(base: number, mean: number, std: number) {
-  const ms_to_wait = base + lognormal_sample(mean, std);
-  //console.log(`waitRandomTime(${base}, ${mean}, ${std}) waiting ${ms_to_wait}ms`)
-  return new Promise<void>((resolve) =>
-    setTimeout(() => resolve(), ms_to_wait)
-  );
 }

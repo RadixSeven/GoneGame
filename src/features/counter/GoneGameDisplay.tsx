@@ -1,13 +1,7 @@
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useEffect } from "react";
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  autoIncrement2,
   getSimulationIsRunning,
   clickedPlayButton,
   clickedPauseButton,
@@ -64,12 +58,7 @@ export function GoneGameDisplay() {
   const simulationIsRunning = useAppSelector(getSimulationIsRunning);
   const images = useAppSelector(getImages);
   const curTime = useAppSelector(getCurrentTime);
-  const count = curTime;
   const dispatch = useAppDispatch();
-  const [incrementAmount, setIncrementAmount] = useState("2");
-
-  const incrementValue = Number(incrementAmount) || 0;
-
   // Call useEffect once to get the tick loop started
   useEffect(
     () => {
@@ -82,55 +71,6 @@ export function GoneGameDisplay() {
   return (
     <div>
       <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <span className={styles.value}>{count}</span>
-        <button
-          className={styles.button}
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-      </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={(e) => setIncrementAmount(e.target.value)}
-        />
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
-        >
-          Add Amount
-        </button>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
-        >
-          Add Async
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementIfOdd(incrementValue))}
-        >
-          Add If Odd
-        </button>
-        <button
-          className={styles.button}
-          onClick={() =>
-            dispatch(autoIncrement2({ amount: incrementValue, numTimes: 4 }))
-          }
-        >
-          Auto-increment 4 times
-        </button>
         {simulationIsRunning ? <PauseButton /> : <PlayButton />}
       </div>
       <div className={styles.row}>

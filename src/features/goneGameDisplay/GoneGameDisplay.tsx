@@ -12,11 +12,13 @@ import {
   timerStopped,
   tickInterval,
   ImageProps,
+  roundToNearest,
 } from "./goneGameDisplaySlice";
 import styles from "./GoneGameDisplay.module.css";
 import meditatorSvg from "../../meditator.svg";
 import { AppDispatch } from "../../app/store";
 import * as R from "ramda";
+import { isUndefined } from "util";
 
 /**
  * Adapted from
@@ -110,6 +112,21 @@ function PlayButton() {
   );
 }
 
+const roundToHalf = roundToNearest(0.5);
+const fadeInStyle = {
+  "0.5": styles.fadeInImage05,
+  "1": styles.fadeInImage10,
+  "1.5": styles.fadeInImage15,
+  "2": styles.fadeInImage20,
+  "2.5": styles.fadeInImage25,
+  "3": styles.fadeInImage30,
+  "3.5": styles.fadeInImage35,
+  "4": styles.fadeInImage40,
+  "4.5": styles.fadeInImage45,
+  "5": styles.fadeInImage50,
+  "5.5": styles.fadeInImage55,
+};
+
 function DisappearingImage(props: { curTime: number; image: ImageProps }) {
   const { curTime } = props;
   const { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
@@ -120,21 +137,35 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
     top: 0,
   };
   if (timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
-    const fadeInText =
-      "fadeIn " + (timeToFinishFadeIn - timeToStartFadeIn) / 1000 + "s";
-    let fadeInStyle = {
-      ...style,
-      animation: fadeInText,
-      WebkitAnimation: fadeInText,
-      MozAnimation: fadeInText,
-      OAnimation: fadeInText,
-      msAnimation: fadeInText,
-    };
+    // Most of this code is to avoid typing warnings
+    const roundedFadeTime = roundToHalf(
+      (timeToFinishFadeIn - timeToStartFadeIn) / 1000
+    );
+    const roundedFadeTimeStr = roundedFadeTime.toString();
+    let class_ = undefined;
+    if (
+      roundedFadeTimeStr === "0.5" ||
+      roundedFadeTimeStr === "1" ||
+      roundedFadeTimeStr === "1.5" ||
+      roundedFadeTimeStr === "2" ||
+      roundedFadeTimeStr === "2.5" ||
+      roundedFadeTimeStr === "3" ||
+      roundedFadeTimeStr === "3.5" ||
+      roundedFadeTimeStr === "4" ||
+      roundedFadeTimeStr === "4.5" ||
+      roundedFadeTimeStr === "5" ||
+      roundedFadeTimeStr === "5.5"
+    ) {
+      class_ = fadeInStyle[roundedFadeTimeStr];
+    }
+    if (class_ === undefined) {
+      class_ = roundedFadeTime > 5.5 ? fadeInStyle["5.5"] : fadeInStyle["0.5"];
+    }
     return (
       <img
-        style={fadeInStyle}
+        style={style}
         src={meditatorSvg}
-        className={styles.fadeInImage}
+        className={class_}
         alt="This disappears and reappears"
       />
     );

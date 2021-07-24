@@ -63,7 +63,7 @@ const initialState: GameState = {
   },
 };
 
-function roundToNearest(granularity: number) {
+export function roundToNearest(granularity: number) {
   return (toRound: number) => granularity * Math.round(toRound / granularity);
 }
 export const tickInterval = 50;

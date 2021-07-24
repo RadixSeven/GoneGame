@@ -5,7 +5,7 @@ import {
   lognormal_sample,
   randomOverlappingPosition,
   waitRandomTime,
-} from "./counterAPI";
+} from "./goneGameAPI";
 import * as R from "ramda";
 import RG from "ramda-generators";
 
@@ -252,7 +252,7 @@ export const autoIncrement2 = createAsyncThunk(
   }
 );
 
-export const counterSlice = createSlice({
+export const goneGameDisplaySlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
@@ -321,7 +321,7 @@ export const {
   timerTicked,
   timerStarted,
   timerStopped,
-} = counterSlice.actions;
+} = goneGameDisplaySlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
@@ -349,4 +349,4 @@ export const incrementIfOdd =
     }
   };
 
-export default counterSlice.reducer;
+export default goneGameDisplaySlice.reducer;

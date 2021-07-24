@@ -18,8 +18,8 @@ import {
   timerStopped,
   tickInterval,
   ImageProps,
-} from "./counterSlice";
-import styles from "./Counter.module.css";
+} from "./goneGameDisplaySlice";
+import styles from "./GoneGameDisplay.module.css";
 import numbersSvg from "../../1121.svg";
 import { AppDispatch } from "../../app/store";
 
@@ -60,7 +60,7 @@ class Ticker {
 
 let GlobalTicker = new Ticker();
 
-export function Counter() {
+export function GoneGameDisplay() {
   const simulationIsRunning = useAppSelector(getSimulationIsRunning);
   const images = useAppSelector(getImages);
   const curTime = useAppSelector(getCurrentTime);

@@ -10,7 +10,7 @@ import RG from "ramda-generators";
 import { glyphs } from "./Glyphs";
 
 export function imageWidth(windowWidth: number) {
-  return windowWidth / 12;
+  return windowWidth / 8;
 }
 
 /**
@@ -83,9 +83,9 @@ const initialState: GameState = {
     height: 500,
   },
   generationParams: {
-    timeBetweenDisappearances: { min: 100, mean: 1000, std: 1000 },
-    fadeInTime: { min: 400, mean: 1500, std: 2200 },
-    opaqueTime: { min: 0, mean: 1000, std: 500 },
+    timeBetweenDisappearances: { min: 500, mean: 4000, std: 1000 },
+    fadeInTime: { min: 500, mean: 2500, std: 2500 },
+    opaqueTime: { min: 100, mean: 4000, std: 2000 },
     numGlyphs: glyphs.length,
   },
 };
@@ -93,7 +93,7 @@ const initialState: GameState = {
 export function roundToNearest(granularity: number) {
   return (toRound: number) => granularity * Math.round(toRound / granularity);
 }
-export const tickInterval = 50;
+export const tickInterval = 250;
 const roundToTick = roundToNearest(tickInterval);
 
 function intSampleFromBoundedLognormal(params: BoundedLogNormalParams) {

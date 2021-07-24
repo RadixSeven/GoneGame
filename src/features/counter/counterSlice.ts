@@ -186,7 +186,7 @@ function fillUpImages(
   generationParams: GenerationParams
 ): ImageProps[] {
   function notDisappeared(i: ImageProps) {
-    return i.timeToDisappear < currentTime;
+    return currentTime < i.timeToDisappear;
   }
   function withinFiveSecondBuffer(i: ImageProps) {
     return i.timeToDisappear <= currentTime + 5000;

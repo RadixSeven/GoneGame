@@ -15,7 +15,8 @@ import {
   getCurrentTime,
   timerTicked,
   timerStarted,
-  timerStopped, tickInterval,
+  timerStopped,
+  tickInterval, ImageProps,
 } from "./counterSlice";
 import styles from "./Counter.module.css";
 import numbersSvg from "../../1121.svg";
@@ -129,14 +130,8 @@ export function Counter() {
         {images.map((i) => (
           <DisappearingImage
             key={i.key}
-            x={i.x}
-            visibility={
-              i.timeToFinishFadeIn < curTime
-                ? i.timeToStartFadeIn >= curTime
-                  ? "fading"
-                  : "gone"
-                : "visible"
-            }
+            curTime={curTime}
+            image={i}
           />
         ))}
       </div>
@@ -162,34 +157,29 @@ function PlayButton() {
 }
 
 function DisappearingImage(props: {
-  x: number;
-  visibility: "fading" | "visible" | "gone";
+  curTime: number;
+  image: ImageProps;
 }) {
   // TODO use the x position
-  switch (props.visibility) {
-    case "fading":
-      return (
-        <img
-          src={numbersSvg}
-          className={styles.fadeInImage}
-          alt="This disappears and reappears"
-        />
-      );
-    case "visible":
-      return (
-        <img
-          src={numbersSvg}
-          className={styles.opaqueImage}
-          alt="This disappears and reappears"
-        />
-      );
-    case "gone":
-      return (
-        <img
-          src={numbersSvg}
-          className={styles.transparentImage}
-          alt="This disappears and reappears"
-        />
-      );
+  let {curTime} = props;
+  let {timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear} = props.image;
+  if(timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
+    return (<img
+            src={numbersSvg}
+            className={styles.fadeInImage}
+            alt="This disappears and reappears"
+        />);
+  }else if (timeToFinishFadeIn <= curTime && curTime < timeToDisappear) {
+    return (<img
+            src={numbersSvg}
+            className={styles.opaqueImage}
+            alt="This disappears and reappears"
+        />);
+  }else {
+    return (<img
+            src={numbersSvg}
+            className={styles.transparentImage}
+            alt="This disappears and reappears"
+        />);
   }
 }

@@ -74,7 +74,7 @@ export function GoneGameDisplay() {
         {simulationIsRunning ? <PauseButton /> : <PlayButton />}
       </div>
       <div className={styles.row}>
-        {images.map((i) => (
+        {images.map((i: ImageProps) => (
           <DisappearingImage key={i.key} curTime={curTime} image={i} />
         ))}
       </div>
@@ -110,7 +110,6 @@ function PlayButton() {
 }
 
 function DisappearingImage(props: { curTime: number; image: ImageProps }) {
-  // TODO use the x position
   let { curTime } = props;
   let { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
     props.image;

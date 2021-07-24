@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "./logo.svg";
-import { GoneGameDisplay } from "./features/counter/GoneGameDisplay";
+import { GoneGameDisplay } from "./features/goneGameDisplay/GoneGameDisplay";
 import "./App.css";
 
 function App() {

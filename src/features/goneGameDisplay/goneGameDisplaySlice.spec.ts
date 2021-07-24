@@ -1,6 +1,6 @@
 import counterReducer from "./goneGameDisplaySlice";
 
-describe("counter reducer", () => {
+describe("goneGameDisplay reducer", () => {
   it("should handle initial state", () => {
     expect(counterReducer(undefined, { type: "unknown" })).toEqual({
       simulationIsRunning: true,

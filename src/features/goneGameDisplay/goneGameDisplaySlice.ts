@@ -216,8 +216,8 @@ function fillUpImages(
         timeToStartFadeIn: currentTime,
         timeToFinishFadeIn: currentTime + 400,
         timeToDisappear: currentTime + 1400,
-        x: 0,
-        y: 0,
+        x: window.width / 2,
+        y: window.height / 2,
         glyphIndex: 0,
         key: 0,
       };
@@ -290,6 +290,13 @@ export const goneGameDisplaySlice = createSlice({
     timerStopped: (state) => {
       state.simulationIsRunning = false;
     },
+    windowResized: (state, action: PayloadAction<WindowProps>) => {
+      state.images.forEach((i) => {
+        i.x = (action.payload.width * i.x) / state.window.width;
+        i.y = (action.payload.height * i.y) / state.window.height;
+      });
+      state.window = action.payload;
+    },
   },
 });
 
@@ -299,6 +306,7 @@ export const {
   timerTicked,
   timerStarted,
   timerStopped,
+  windowResized,
 } = goneGameDisplaySlice.actions;
 
 // The function below is called a selector and allows us to select a value from

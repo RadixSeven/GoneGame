@@ -19,6 +19,7 @@ import styles from "./GoneGameDisplay.module.css";
 import { AppDispatch } from "../../app/store";
 import * as R from "ramda";
 import { glyphs } from "./Glyphs";
+import useWindowDimensions from "./windowDimensions";
 
 /**
  * Adapted from
@@ -62,6 +63,8 @@ export function GoneGameDisplay() {
   const images = useAppSelector(getImages);
   const curTime = useAppSelector(getCurrentTime);
   const dispatch = useAppDispatch();
+  // Set up window resizing hook
+  useWindowDimensions(dispatch);
   // Call useEffect once to get the tick loop started
   useEffect(
     () => {

@@ -14,9 +14,35 @@ import {
   getImages,
   getCurrentTime,
   millisecondsPassed,
+  timerTicked,
+  timerStarted,
+  timerStopped,
 } from "./counterSlice";
 import styles from "./Counter.module.css";
 import numbersSvg from "../../1121.svg";
+import { AppDispatch } from "../../app/store";
+
+/**
+ * Adapted from
+ * https://medium.com/@machadogj/timers-in-react-with-redux-apps-9a5a722162e8
+ */
+class Ticker {
+  tickerHandle: number | undefined;
+  constructor() {
+    this.tickerHandle = undefined;
+  }
+  start(dispatch: AppDispatch) {
+    window.clearInterval(this.tickerHandle);
+    this.tickerHandle = window.setInterval(() => dispatch(timerTicked(50)), 50);
+    dispatch(timerStarted());
+  }
+  stop(dispatch: AppDispatch) {
+    clearInterval(this.tickerHandle);
+    dispatch(timerStopped());
+  }
+}
+
+let GlobalTicker = new Ticker();
 
 export function Counter() {
   const simulationIsRunning = useAppSelector(getSimulationIsRunning);
@@ -31,7 +57,7 @@ export function Counter() {
   // Call useEffect once to get the tick loop started
   useEffect(
     () => {
-      dispatch(millisecondsPassed({ numMs: 0 }));
+      GlobalTicker.start(dispatch);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []

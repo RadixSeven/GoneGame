@@ -57,9 +57,9 @@ const initialState: GameState = {
   currentTime: 0,
   images: [],
   generationParams: {
-    timeBetweenDisappearances: { min: 100, mean: 900, std: 1000 },
-    fadeInTime: { min: 400, mean: 600, std: 200 },
-    opaqueTime: { min: 0, mean: 200, std: 200 },
+    timeBetweenDisappearances: { min: 100, mean: 2500, std: 1000 },
+    fadeInTime: { min: 400, mean: 1500, std: 2200 },
+    opaqueTime: { min: 0, mean: 1000, std: 500 },
   },
 };
 
@@ -163,8 +163,11 @@ function fillUpImages(
   function notDisappeared(i: ImageProps) {
     return currentTime < i.timeToDisappear;
   }
-  function withinFiveSecondBuffer(i: ImageProps) {
-    return i.timeToDisappear <= currentTime + 5000;
+  function withinBuffer(i: ImageProps) {
+    return (
+      i.timeToDisappear <=
+      currentTime + 10 * generationParams.timeBetweenDisappearances.mean
+    );
   }
   const withoutDisappeared = R.filter(notDisappeared, images);
   const sortedByDisappearance = R.sortBy<ImageProps>(
@@ -184,7 +187,7 @@ function fillUpImages(
 
   const newImages = RG.takeAll(
     RG.takeWhile(
-      withinFiveSecondBuffer,
+      withinBuffer,
       newImagesDisappearingAfter(currentTime, finalImage, generationParams)
     )
   );

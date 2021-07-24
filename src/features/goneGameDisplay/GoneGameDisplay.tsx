@@ -16,9 +16,9 @@ import {
 } from "./goneGameDisplaySlice";
 import styles from "./GoneGameDisplay.module.css";
 import meditatorSvg from "../../meditator.svg";
+import grayMeditatorSvg from "../../meditator_gray.svg";
 import { AppDispatch } from "../../app/store";
 import * as R from "ramda";
-import { isUndefined } from "util";
 
 /**
  * Adapted from
@@ -77,8 +77,13 @@ export function GoneGameDisplay() {
         {simulationIsRunning ? <PauseButton /> : <PlayButton />}
       </div>
       <div className={styles.row}>
-        {R.reverse(images).map((i: ImageProps) => (
-          <DisappearingImage key={i.key} curTime={curTime} image={i} />
+        {R.reverse(images).map((i: ImageProps, idx, arr) => (
+          <DisappearingImage
+            key={i.key}
+            curTime={curTime}
+            image={i}
+            isHighlighted={idx + 1 === arr.length}
+          />
         ))}
       </div>
     </div>
@@ -127,8 +132,12 @@ const fadeInStyle = {
   "5.5": styles.fadeInImage55,
 };
 
-function DisappearingImage(props: { curTime: number; image: ImageProps }) {
-  const { curTime } = props;
+function DisappearingImage(props: {
+  curTime: number;
+  image: ImageProps;
+  isHighlighted: boolean;
+}) {
+  const { curTime, isHighlighted } = props;
   const { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
     props.image;
   let style: CSSProperties = {
@@ -136,6 +145,7 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
     left: x,
     top: 0,
   };
+  const picture = isHighlighted ? meditatorSvg : grayMeditatorSvg;
   if (timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
     // Most of this code is to avoid typing warnings
     const roundedFadeTime = roundToHalf(
@@ -161,10 +171,11 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
     if (class_ === undefined) {
       class_ = roundedFadeTime > 5.5 ? fadeInStyle["5.5"] : fadeInStyle["0.5"];
     }
+
     return (
       <img
         style={style}
-        src={meditatorSvg}
+        src={picture}
         className={class_}
         alt="This disappears and reappears"
       />
@@ -173,7 +184,7 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
     return (
       <img
         style={style}
-        src={meditatorSvg}
+        src={picture}
         className={styles.opaqueImage}
         alt="This disappears and reappears"
       />
@@ -181,7 +192,7 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
   } else {
     return (
       <img
-        src={meditatorSvg}
+        src={picture}
         className={styles.transparentImage}
         alt="This disappears and reappears"
       />

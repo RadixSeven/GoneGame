@@ -45,23 +45,23 @@ const Chance = require("chance");
 export const chance = new Chance();
 
 /**
- * Return a random horizontal position that makes an image of width imageWidth
- * overlap an already fixed image of width imageWidth whose x coordinate is imageX
- * within a viewport that is maxX pixels wide.
+ * Return a random position that makes an image of size imageSize
+ * overlap an already fixed image of size imageSize whose upper left hand coordinate is imageCoord
+ * within a viewport that is maxCoord pixels wide.
  *
- * @param imageX The upper left pixel x coordinate of the image that has already been placed
- * @param imageWidth The width of the two images that should overlap
- * @param maxX Maximum x value in the viewport
+ * @param imageCoord The coordinate of one dimension of the upper left pixel coordinate of the image that has already been placed
+ * @param imageSize The size of the two images that should overlap on the same dimension as imageCoord
+ * @param maxCoord Maximum value in the viewport for the dimension from which imageCoord is taken
  */
 export function randomOverlappingPosition(
-  imageX: number,
-  imageWidth: number,
-  maxX: number
+  imageCoord: number,
+  imageSize: number,
+  maxCoord: number
 ) {
-  const maxImageX = R.max(0, maxX - imageWidth); // Images bigger than viewport are always at position 0
+  const maxImageX = R.max(0, maxCoord - imageSize); // Images bigger than viewport are always at position 0
   return chance.integer({
-    min: R.max(0, imageX - imageWidth / 2),
-    max: R.min(maxImageX, imageX + imageWidth / 2),
+    min: R.max(0, imageCoord - imageSize / 2),
+    max: R.min(maxImageX, imageCoord + imageSize / 2),
   });
 }
 

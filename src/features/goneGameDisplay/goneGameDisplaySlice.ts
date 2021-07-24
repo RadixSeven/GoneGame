@@ -10,7 +10,7 @@ import RG from "ramda-generators";
 import { glyphs } from "./Glyphs";
 
 export const imageWidth = 88;
-export const viewportWidth = 500;
+export const imageHeight = imageWidth;
 
 /**
  * Properties of an image - all times in milliseconds
@@ -32,6 +32,10 @@ export interface ImageProps {
    * Horizontal location for upper left hand corner of image
    */
   x: number;
+  /**
+   * Vertical location for upper left hand corner of image
+   */
+  y: number;
   /**
    * Index of the glyph to display in the image
    */
@@ -59,13 +63,24 @@ export interface GameState {
   simulationIsRunning: boolean;
   currentTime: number;
   images: ImageProps[];
+  window: WindowProps;
   generationParams: GenerationParams;
+}
+
+// Dimensions of the window in pixels
+export interface WindowProps {
+  width: number;
+  height: number;
 }
 
 const initialState: GameState = {
   simulationIsRunning: true,
   currentTime: 0,
   images: [],
+  window: {
+    width: 500,
+    height: 500,
+  },
   generationParams: {
     timeBetweenDisappearances: { min: 100, mean: 1000, std: 1000 },
     fadeInTime: { min: 400, mean: 1500, std: 2200 },
@@ -90,11 +105,13 @@ function intSampleFromBoundedLognormal(params: BoundedLogNormalParams) {
  * Images are generated in order of disappearance and overlap with the previous to disappear
  * @param currentTime
  * @param lastImage
+ * @param window
  * @param gp
  */
 function* newImagesDisappearingAfter(
   currentTime: number,
   lastImage: ImageProps,
+  window: WindowProps,
   gp: GenerationParams
 ) {
   function goodDeltas(disappear: number, opaque: number, fade: number) {
@@ -107,14 +124,16 @@ function* newImagesDisappearingAfter(
     fade: number,
     lastImageDisappear: number,
     lastImageKey: number,
-    lastImageX: number
+    lastImageX: number,
+    lastImageY: number
   ): ImageProps {
     const disTime = lastImageDisappear + disappear;
     return {
       timeToStartFadeIn: disTime - opaque - fade,
       timeToFinishFadeIn: disTime - opaque,
       timeToDisappear: disTime,
-      x: randomOverlappingPosition(lastImageX, imageWidth, viewportWidth),
+      x: randomOverlappingPosition(lastImageX, imageWidth, window.width),
+      y: randomOverlappingPosition(lastImageY, imageHeight, window.height),
       glyphIndex: chance.integer({ min: 0, max: gp.numGlyphs - 1 }),
       key: lastImageKey + 1,
     };
@@ -135,7 +154,8 @@ function* newImagesDisappearingAfter(
           fadeDelta,
           lastImage.timeToDisappear,
           lastImage.key,
-          lastImage.x
+          lastImage.x,
+          lastImage.y
         );
         foundGoodDeltas = true;
         break;
@@ -148,7 +168,8 @@ function* newImagesDisappearingAfter(
         500,
         lastImage.timeToDisappear,
         lastImage.key,
-        lastImage.x
+        lastImage.x,
+        lastImage.y
       );
     }
     yield lastImage;
@@ -165,11 +186,13 @@ function* newImagesDisappearingAfter(
  *
  * @param currentTime The current time (in milliseconds)
  * @param images The image properties to adjust
+ * @param window The properties of the window in which the images will live
  * @param generationParams The parameters describing the distribution of new images
  */
 function fillUpImages(
   currentTime: number,
   images: ImageProps[],
+  window: WindowProps,
   generationParams: GenerationParams
 ): ImageProps[] {
   function notDisappeared(i: ImageProps) {
@@ -194,6 +217,7 @@ function fillUpImages(
         timeToFinishFadeIn: currentTime + 400,
         timeToDisappear: currentTime + 1400,
         x: 0,
+        y: 0,
         glyphIndex: 0,
         key: 0,
       };
@@ -201,7 +225,12 @@ function fillUpImages(
   const newImages = RG.takeAll(
     RG.takeWhile(
       withinBuffer,
-      newImagesDisappearingAfter(currentTime, finalImage, generationParams)
+      newImagesDisappearingAfter(
+        currentTime,
+        finalImage,
+        window,
+        generationParams
+      )
     )
   );
   return R.concat(sortedByDisappearance, newImages);
@@ -248,6 +277,7 @@ export const goneGameDisplaySlice = createSlice({
         state.images = fillUpImages(
           state.currentTime,
           state.images,
+          state.window,
           state.generationParams
         );
       }

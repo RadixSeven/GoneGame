@@ -143,12 +143,13 @@ function DisappearingImage(props: {
     timeToFinishFadeIn,
     timeToDisappear,
     x,
+    y,
     glyphIndex,
   } = props.image;
   let style: CSSProperties = {
     position: "absolute",
     left: x,
-    top: 0,
+    top: y,
     width: imageWidth,
   };
   if (!isHighlighted) {

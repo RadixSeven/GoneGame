@@ -13,10 +13,9 @@ import {
   clickedPauseButton,
   getImages,
   getCurrentTime,
-  millisecondsPassed,
   timerTicked,
   timerStarted,
-  timerStopped,
+  timerStopped, tickInterval,
 } from "./counterSlice";
 import styles from "./Counter.module.css";
 import numbersSvg from "../../1121.svg";
@@ -33,7 +32,7 @@ class Ticker {
   }
   start(dispatch: AppDispatch) {
     window.clearInterval(this.tickerHandle);
-    this.tickerHandle = window.setInterval(() => dispatch(timerTicked(50)), 50);
+    this.tickerHandle = window.setInterval(() => dispatch(timerTicked(tickInterval)), tickInterval);
     dispatch(timerStarted());
   }
   stop(dispatch: AppDispatch) {

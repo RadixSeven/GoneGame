@@ -75,6 +75,13 @@ const initialState: CounterState = {
   },
 };
 
+function roundToNearest(granularity: number) {
+  return (toRound: number) =>
+      granularity * Math.round(toRound/granularity);
+}
+export const tickInterval = 50;
+const roundToTick = roundToNearest(tickInterval);
+
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
@@ -90,7 +97,7 @@ export const incrementAsync = createAsyncThunk(
 );
 
 function intSampleFromBoundedLognormal(params: BoundedLogNormalParams) {
-  return Math.round(params.min + lognormal_sample(params.mean, params.std));
+  return roundToTick(params.min + lognormal_sample(params.mean, params.std));
 }
 
 /**
@@ -212,22 +219,31 @@ function fillUpImages(
 
 /**
  * Return the time until the next event after currentTime (in milliseconds)
+ *
+ * If there are no events after the current time, returns Infinity
+ * @param currentTime The current time
+ * @param images The images that are changing
+ */
+function timeOfNextEvent(currentTime: number, images: ImageProps[]): number {
+  function getTimes(i: ImageProps) {
+    return [i.timeToDisappear, i.timeToFinishFadeIn, i.timeToStartFadeIn];
+  }
+
+  function isLater(t: number) {
+    return t > currentTime;
+  }
+
+  const getEarliestTime = R.pipe(R.chain(getTimes), R.filter(isLater), R.reduce<number, number>(R.min, Infinity));
+  return getEarliestTime(images);
+}
+
+/**
+ * Return the time until the next event after currentTime (in milliseconds)
  * @param currentTime The current time
  * @param images The images that are changing
  */
 function timeUntilNextEvent(currentTime: number, images: ImageProps[]): number {
-  function getTimes(i: ImageProps) {
-    return [i.timeToDisappear, i.timeToFinishFadeIn, i.timeToStartFadeIn];
-  }
-  function isLater(t: number) {
-    return t > currentTime;
-  }
-  const getEarliestTime = R.pipe(
-    R.chain(getTimes),
-    R.filter(isLater),
-    R.reduce<number, number>(R.min, Infinity)
-  );
-  return getEarliestTime(images) - currentTime;
+  return timeOfNextEvent(currentTime, images) - currentTime;
 }
 
 export const millisecondsPassed = createAsyncThunk<
@@ -261,19 +277,13 @@ export const autoIncrement2 = createAsyncThunk(
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
       state.value += 1;
     },
     decrement: (state) => {
       state.value -= 1;
     },
-    // Use the PayloadAction type to declare the contents of `action.payload`
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
@@ -285,6 +295,10 @@ export const counterSlice = createSlice({
     },
     timerTicked: (state, action: PayloadAction<number>) => {
       state.currentTime += action.payload;
+      const nextEvent = timeOfNextEvent(state.currentTime-1, state.images);
+      if(nextEvent === Infinity || nextEvent === state.currentTime){
+        state.images = fillUpImages(state.currentTime, state.images, state.generationParams);
+      }
     },
     timerStarted: (state) => {
       state.currentTime = 0;

@@ -35,6 +35,15 @@ class Ticker {
     this.tickerHandle = window.setInterval(() => dispatch(timerTicked(tickInterval)), tickInterval);
     dispatch(timerStarted());
   }
+  pause(dispatch: AppDispatch){
+    window.clearInterval(this.tickerHandle);
+    dispatch(clickedPauseButton());
+  }
+  restart(dispatch: AppDispatch){
+    window.clearInterval(this.tickerHandle);
+    this.tickerHandle = window.setInterval(() => dispatch(timerTicked(tickInterval)), tickInterval);
+    dispatch(clickedPlayButton());
+  }
   stop(dispatch: AppDispatch) {
     clearInterval(this.tickerHandle);
     dispatch(timerStopped());
@@ -139,17 +148,17 @@ function SimpleButton(props: { onClick: Function; buttonText: string }) {
   const dispatch = useAppDispatch();
 
   return (
-    <button className={styles.button} onClick={() => dispatch(props.onClick())}>
+    <button className={styles.button} onClick={() => props.onClick(dispatch)}>
       {props.buttonText}
     </button>
   );
 }
 
 function PauseButton() {
-  return <SimpleButton onClick={clickedPauseButton} buttonText={"▌▌"} />;
+  return <SimpleButton onClick={(dispatch: AppDispatch)=>GlobalTicker.pause(dispatch)} buttonText={"▌▌"} />;
 }
 function PlayButton() {
-  return <SimpleButton onClick={clickedPlayButton} buttonText={"▶"} />;
+  return <SimpleButton onClick={(dispatch: AppDispatch)=>GlobalTicker.restart(dispatch)} buttonText={"▶"} />;
 }
 
 function DisappearingImage(props: {

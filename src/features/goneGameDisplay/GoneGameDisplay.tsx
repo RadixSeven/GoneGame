@@ -111,17 +111,28 @@ function PlayButton() {
 }
 
 function DisappearingImage(props: { curTime: number; image: ImageProps }) {
-  let { curTime } = props;
-  let { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
+  const { curTime } = props;
+  const { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
     props.image;
   let style: CSSProperties = {
     position: "absolute",
     left: x,
+    top: 0,
   };
   if (timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
+    const fadeInText =
+      "fadeIn " + (timeToFinishFadeIn - timeToStartFadeIn) / 1000 + "s";
+    let fadeInStyle = {
+      ...style,
+      animation: fadeInText,
+      WebkitAnimation: fadeInText,
+      MozAnimation: fadeInText,
+      OAnimation: fadeInText,
+      msAnimation: fadeInText,
+    };
     return (
       <img
-        style={style}
+        style={fadeInStyle}
         src={meditatorSvg}
         className={styles.fadeInImage}
         alt="This disappears and reappears"

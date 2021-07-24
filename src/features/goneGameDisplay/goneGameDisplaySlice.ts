@@ -87,7 +87,8 @@ function* newImagesDisappearingAfter(
   gp: GenerationParams
 ) {
   function goodDeltas(disappear: number, opaque: number, fade: number) {
-    return disappear >= opaque + fade;
+    const newFadeInTime = lastImage.timeToDisappear + disappear - opaque - fade;
+    return newFadeInTime >= currentTime;
   }
   function imageFromDeltas(
     disappear: number,

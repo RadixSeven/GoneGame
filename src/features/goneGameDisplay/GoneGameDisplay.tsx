@@ -7,6 +7,7 @@ import {
   getCurrentTime,
   getImages,
   getSimulationIsRunning,
+  getWindowProps,
   ImageProps,
   imageWidth,
   roundToNearest,
@@ -62,6 +63,7 @@ export function GoneGameDisplay() {
   const simulationIsRunning = useAppSelector(getSimulationIsRunning);
   const images = useAppSelector(getImages);
   const curTime = useAppSelector(getCurrentTime);
+  const window = useAppSelector(getWindowProps);
   const dispatch = useAppDispatch();
   // Set up window resizing hook
   useWindowDimensions(dispatch);
@@ -85,6 +87,7 @@ export function GoneGameDisplay() {
             key={i.key}
             curTime={curTime}
             image={i}
+            imageWidth={imageWidth(window.width)}
             isHighlighted={idx + 1 === arr.length}
           />
         ))}
@@ -138,9 +141,10 @@ const fadeInStyle = {
 function DisappearingImage(props: {
   curTime: number;
   image: ImageProps;
+  imageWidth: number;
   isHighlighted: boolean;
 }) {
-  const { curTime, isHighlighted } = props;
+  const { curTime, isHighlighted, imageWidth } = props;
   const {
     timeToStartFadeIn,
     timeToFinishFadeIn,

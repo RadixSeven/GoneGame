@@ -9,8 +9,9 @@ import * as R from "ramda";
 import RG from "ramda-generators";
 import { glyphs } from "./Glyphs";
 
-export const imageWidth = 88;
-export const imageHeight = imageWidth;
+export function imageWidth(windowWidth: number) {
+  return windowWidth / 12;
+}
 
 /**
  * Properties of an image - all times in milliseconds
@@ -132,8 +133,16 @@ function* newImagesDisappearingAfter(
       timeToStartFadeIn: disTime - opaque - fade,
       timeToFinishFadeIn: disTime - opaque,
       timeToDisappear: disTime,
-      x: randomOverlappingPosition(lastImageX, imageWidth, window.width),
-      y: randomOverlappingPosition(lastImageY, imageHeight, window.height),
+      x: randomOverlappingPosition(
+        lastImageX,
+        imageWidth(window.width),
+        window.width
+      ),
+      y: randomOverlappingPosition(
+        lastImageY,
+        imageWidth(window.width),
+        window.height
+      ),
       glyphIndex: chance.integer({ min: 0, max: gp.numGlyphs - 1 }),
       key: lastImageKey + 1,
     };
@@ -320,5 +329,8 @@ export const getImages = (state: RootState) => state.goneGameDisplay.images;
 
 export const getCurrentTime = (state: RootState) =>
   state.goneGameDisplay.currentTime;
+
+export const getWindowProps = (state: RootState) =>
+  state.goneGameDisplay.window;
 
 export default goneGameDisplaySlice.reducer;

@@ -57,7 +57,7 @@ const initialState: GameState = {
   currentTime: 0,
   images: [],
   generationParams: {
-    timeBetweenDisappearances: { min: 100, mean: 2500, std: 1000 },
+    timeBetweenDisappearances: { min: 100, mean: 1000, std: 1000 },
     fadeInTime: { min: 400, mean: 1500, std: 2200 },
     opaqueTime: { min: 0, mean: 1000, std: 500 },
   },

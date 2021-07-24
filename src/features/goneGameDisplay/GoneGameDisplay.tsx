@@ -16,7 +16,6 @@ import {
 } from "./goneGameDisplaySlice";
 import styles from "./GoneGameDisplay.module.css";
 import meditatorSvg from "../../meditator.svg";
-import grayMeditatorSvg from "../../meditator_gray.svg";
 import { AppDispatch } from "../../app/store";
 import * as R from "ramda";
 
@@ -145,7 +144,13 @@ function DisappearingImage(props: {
     left: x,
     top: 0,
   };
-  const picture = isHighlighted ? meditatorSvg : grayMeditatorSvg;
+  if (!isHighlighted) {
+    style = {
+      ...style,
+      filter: "opacity(25%)",
+    };
+  }
+  const picture = meditatorSvg; // isHighlighted ? meditatorSvg : grayMeditatorSvg;
   if (timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
     // Most of this code is to avoid typing warnings
     const roundedFadeTime = roundToHalf(

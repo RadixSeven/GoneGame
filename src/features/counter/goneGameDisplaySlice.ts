@@ -45,14 +45,14 @@ export interface GenerationParams {
   opaqueTime: BoundedLogNormalParams;
 }
 
-export interface CounterState {
+export interface GameState {
   simulationIsRunning: boolean;
   currentTime: number;
   images: ImageProps[];
   generationParams: GenerationParams;
 }
 
-const initialState: CounterState = {
+const initialState: GameState = {
   simulationIsRunning: true,
   currentTime: 0,
   images: [],

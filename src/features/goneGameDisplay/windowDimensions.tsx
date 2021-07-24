@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { AppDispatch } from "../../app/store";
 import { windowResized } from "./goneGameDisplaySlice";
 

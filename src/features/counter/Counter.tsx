@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
@@ -16,7 +16,8 @@ import {
   timerTicked,
   timerStarted,
   timerStopped,
-  tickInterval, ImageProps,
+  tickInterval,
+  ImageProps,
 } from "./counterSlice";
 import styles from "./Counter.module.css";
 import numbersSvg from "../../1121.svg";
@@ -33,16 +34,22 @@ class Ticker {
   }
   start(dispatch: AppDispatch) {
     window.clearInterval(this.tickerHandle);
-    this.tickerHandle = window.setInterval(() => dispatch(timerTicked(tickInterval)), tickInterval);
+    this.tickerHandle = window.setInterval(
+      () => dispatch(timerTicked(tickInterval)),
+      tickInterval
+    );
     dispatch(timerStarted());
   }
-  pause(dispatch: AppDispatch){
+  pause(dispatch: AppDispatch) {
     window.clearInterval(this.tickerHandle);
     dispatch(clickedPauseButton());
   }
-  restart(dispatch: AppDispatch){
+  restart(dispatch: AppDispatch) {
     window.clearInterval(this.tickerHandle);
-    this.tickerHandle = window.setInterval(() => dispatch(timerTicked(tickInterval)), tickInterval);
+    this.tickerHandle = window.setInterval(
+      () => dispatch(timerTicked(tickInterval)),
+      tickInterval
+    );
     dispatch(clickedPlayButton());
   }
   stop(dispatch: AppDispatch) {
@@ -128,11 +135,7 @@ export function Counter() {
       </div>
       <div className={styles.row}>
         {images.map((i) => (
-          <DisappearingImage
-            key={i.key}
-            curTime={curTime}
-            image={i}
-          />
+          <DisappearingImage key={i.key} curTime={curTime} image={i} />
         ))}
       </div>
     </div>
@@ -150,36 +153,56 @@ function SimpleButton(props: { onClick: Function; buttonText: string }) {
 }
 
 function PauseButton() {
-  return <SimpleButton onClick={(dispatch: AppDispatch)=>GlobalTicker.pause(dispatch)} buttonText={"▌▌"} />;
+  return (
+    <SimpleButton
+      onClick={(dispatch: AppDispatch) => GlobalTicker.pause(dispatch)}
+      buttonText={"▌▌"}
+    />
+  );
 }
 function PlayButton() {
-  return <SimpleButton onClick={(dispatch: AppDispatch)=>GlobalTicker.restart(dispatch)} buttonText={"▶"} />;
+  return (
+    <SimpleButton
+      onClick={(dispatch: AppDispatch) => GlobalTicker.restart(dispatch)}
+      buttonText={"▶"}
+    />
+  );
 }
 
-function DisappearingImage(props: {
-  curTime: number;
-  image: ImageProps;
-}) {
+function DisappearingImage(props: { curTime: number; image: ImageProps }) {
   // TODO use the x position
-  let {curTime} = props;
-  let {timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear} = props.image;
-  if(timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
-    return (<img
-            src={numbersSvg}
-            className={styles.fadeInImage}
-            alt="This disappears and reappears"
-        />);
-  }else if (timeToFinishFadeIn <= curTime && curTime < timeToDisappear) {
-    return (<img
-            src={numbersSvg}
-            className={styles.opaqueImage}
-            alt="This disappears and reappears"
-        />);
-  }else {
-    return (<img
-            src={numbersSvg}
-            className={styles.transparentImage}
-            alt="This disappears and reappears"
-        />);
+  let { curTime } = props;
+  let { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
+    props.image;
+  let style: CSSProperties = {
+    position: "absolute",
+    left: x,
+  };
+  if (timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
+    return (
+      <img
+        style={style}
+        src={numbersSvg}
+        className={styles.fadeInImage}
+        alt="This disappears and reappears"
+      />
+    );
+  } else if (timeToFinishFadeIn <= curTime && curTime < timeToDisappear) {
+    return (
+      <img
+        style={style}
+        src={numbersSvg}
+        className={styles.opaqueImage}
+        alt="This disappears and reappears"
+      />
+    );
+  } else {
+    return (
+      <img
+        src={numbersSvg}
+        className={styles.transparentImage}
+        alt="This disappears and reappears"
+      />
+    );
   }
 }

@@ -75,8 +75,7 @@ const initialState: CounterState = {
 };
 
 function roundToNearest(granularity: number) {
-  return (toRound: number) =>
-      granularity * Math.round(toRound/granularity);
+  return (toRound: number) => granularity * Math.round(toRound / granularity);
 }
 export const tickInterval = 50;
 const roundToTick = roundToNearest(tickInterval);
@@ -232,7 +231,11 @@ function timeOfNextEvent(currentTime: number, images: ImageProps[]): number {
     return t > currentTime;
   }
 
-  const getEarliestTime = R.pipe(R.chain(getTimes), R.filter(isLater), R.reduce<number, number>(R.min, Infinity));
+  const getEarliestTime = R.pipe(
+    R.chain(getTimes),
+    R.filter(isLater),
+    R.reduce<number, number>(R.min, Infinity)
+  );
   return getEarliestTime(images);
 }
 
@@ -270,9 +273,13 @@ export const counterSlice = createSlice({
     },
     timerTicked: (state, action: PayloadAction<number>) => {
       state.currentTime += action.payload;
-      const nextEvent = timeOfNextEvent(state.currentTime-1, state.images);
-      if(nextEvent === Infinity || nextEvent === state.currentTime){
-        state.images = fillUpImages(state.currentTime, state.images, state.generationParams);
+      const nextEvent = timeOfNextEvent(state.currentTime - 1, state.images);
+      if (nextEvent === Infinity || nextEvent === state.currentTime) {
+        state.images = fillUpImages(
+          state.currentTime,
+          state.images,
+          state.generationParams
+        );
       }
     },
     timerStarted: (state) => {

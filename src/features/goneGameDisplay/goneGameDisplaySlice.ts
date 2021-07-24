@@ -1,8 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { lognormal_sample, randomOverlappingPosition } from "./goneGameAPI";
+import {
+  chance,
+  lognormal_sample,
+  randomOverlappingPosition,
+} from "./goneGameAPI";
 import * as R from "ramda";
 import RG from "ramda-generators";
+import { glyphs } from "./Glyphs";
 
 export const imageWidth = 88;
 export const viewportWidth = 500;
@@ -28,6 +33,10 @@ export interface ImageProps {
    */
   x: number;
   /**
+   * Index of the glyph to display in the image
+   */
+  glyphIndex: number;
+  /**
    * Key for rendering
    */
   key: number;
@@ -43,6 +52,7 @@ export interface GenerationParams {
   timeBetweenDisappearances: BoundedLogNormalParams;
   fadeInTime: BoundedLogNormalParams;
   opaqueTime: BoundedLogNormalParams;
+  numGlyphs: number;
 }
 
 export interface GameState {
@@ -60,6 +70,7 @@ const initialState: GameState = {
     timeBetweenDisappearances: { min: 100, mean: 1000, std: 1000 },
     fadeInTime: { min: 400, mean: 1500, std: 2200 },
     opaqueTime: { min: 0, mean: 1000, std: 500 },
+    numGlyphs: glyphs.length,
   },
 };
 
@@ -104,6 +115,7 @@ function* newImagesDisappearingAfter(
       timeToFinishFadeIn: disTime - opaque,
       timeToDisappear: disTime,
       x: randomOverlappingPosition(lastImageX, imageWidth, viewportWidth),
+      glyphIndex: chance.integer({ min: 0, max: gp.numGlyphs - 1 }),
       key: lastImageKey + 1,
     };
   }
@@ -182,6 +194,7 @@ function fillUpImages(
         timeToFinishFadeIn: currentTime + 400,
         timeToDisappear: currentTime + 1400,
         x: 0,
+        glyphIndex: 0,
         key: 0,
       };
 

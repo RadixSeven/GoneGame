@@ -1,23 +1,24 @@
 import React, { CSSProperties, useEffect } from "react";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  getSimulationIsRunning,
-  clickedPlayButton,
   clickedPauseButton,
-  getImages,
+  clickedPlayButton,
   getCurrentTime,
-  timerTicked,
+  getImages,
+  getSimulationIsRunning,
+  ImageProps,
+  imageWidth,
+  roundToNearest,
+  tickInterval,
   timerStarted,
   timerStopped,
-  tickInterval,
-  ImageProps,
-  roundToNearest,
+  timerTicked,
 } from "./goneGameDisplaySlice";
 import styles from "./GoneGameDisplay.module.css";
-import meditatorSvg from "../../meditator.svg";
 import { AppDispatch } from "../../app/store";
 import * as R from "ramda";
+import { glyphs } from "./Glyphs";
 
 /**
  * Adapted from
@@ -137,12 +138,18 @@ function DisappearingImage(props: {
   isHighlighted: boolean;
 }) {
   const { curTime, isHighlighted } = props;
-  const { timeToStartFadeIn, timeToFinishFadeIn, timeToDisappear, x } =
-    props.image;
+  const {
+    timeToStartFadeIn,
+    timeToFinishFadeIn,
+    timeToDisappear,
+    x,
+    glyphIndex,
+  } = props.image;
   let style: CSSProperties = {
     position: "absolute",
     left: x,
     top: 0,
+    width: imageWidth,
   };
   if (!isHighlighted) {
     style = {
@@ -150,7 +157,7 @@ function DisappearingImage(props: {
       filter: "opacity(25%)",
     };
   }
-  const picture = meditatorSvg; // isHighlighted ? meditatorSvg : grayMeditatorSvg;
+  const picture = glyphs[glyphIndex % glyphs.length];
   if (timeToStartFadeIn <= curTime && curTime < timeToFinishFadeIn) {
     // Most of this code is to avoid typing warnings
     const roundedFadeTime = roundToHalf(

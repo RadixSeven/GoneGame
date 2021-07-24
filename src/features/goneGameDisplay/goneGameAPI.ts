@@ -42,7 +42,7 @@ const Chance = require("chance");
 /**
  * Random number generator instance
  */
-const chance = new Chance();
+export const chance = new Chance();
 
 /**
  * Return a random horizontal position that makes an image of width imageWidth

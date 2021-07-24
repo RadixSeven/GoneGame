@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Octagram which fits in square interlaced with circle.</title>
+<circle cx="300" cy="300" r="300" fill="rgb(34,161,34)"/>
+<g stroke-width="180" stroke="rgb(0,0,0)" fill="none" transform="translate(300,300)scale(0.175,-0.175)rotate(45)">
+<circle r="796"/>
+<circle stroke-width="90" stroke="rgb(239,41,41)" r="796"/>
+<path id="Main" d="M0,1000L1000-1000L-1000,0L1000,1000L0-1000L-1000,1000L1000,0L-1000-1000L0,1000Z"/>
+<use stroke-width="90" stroke="rgb(255,239,25)" xlink:href="#Main"/>
+<g id="Fix1"><path d="M440,120L560-120
+M150,425L510,245 M640,280L576,148"/>
+<path stroke-width="90" stroke="rgb(255,239,25)" d="M430,140L570-140
+M136,432L516,242 M650,300L567,134"/></g>
+<use transform="rotate(90)" xlink:href="#Fix1"/>
+<use transform="rotate(180)" xlink:href="#Fix1"/>
+<use transform="rotate(270)" xlink:href="#Fix1"/>
+<g id="Fix2"><path d="M165,670L232,536"/>
+<path stroke-width="90" stroke="rgb(255,239,25)" d="M155,690L238,524"/></g>
+<use transform="rotate(90)" xlink:href="#Fix2"/>
+<use transform="rotate(180)" xlink:href="#Fix2"/>
+<use transform="rotate(270)" xlink:href="#Fix2"/>
+<g id="Fix3"><path d="M0,796A796,796 0 0,0 252.574,754.865
+M618.608,500.939A796,796 0 0,0 754.865,252.574"/>
+<path stroke-width="90" stroke="rgb(239,41,41)"
+d="M-13.8921,795.879A796,796 0 0,0 0,796A796,796 0 0,0 265.71,750.343
+M609.771,511.659A796,796 0 0,0 759.158,239.362"/></g>
+<use transform="rotate(90)" xlink:href="#Fix3"/>
+<use transform="rotate(180)" xlink:href="#Fix3"/>
+<use transform="rotate(270)" xlink:href="#Fix3"/>
+<path id="Fix4" stroke-width="45" d="M229.065,690L309.065,730
+M-195,760.935L-235,680.935 M10,869.065L-40,769.065"/>
+<use transform="rotate(90)" xlink:href="#Fix4"/>
+<use transform="rotate(180)" xlink:href="#Fix4"/>
+<use transform="rotate(270)" xlink:href="#Fix4"/></g></svg>

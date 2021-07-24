@@ -14,7 +14,7 @@ import {
   ImageProps,
 } from "./goneGameDisplaySlice";
 import styles from "./GoneGameDisplay.module.css";
-import numbersSvg from "../../1121.svg";
+import meditatorSvg from "../../meditator.svg";
 import { AppDispatch } from "../../app/store";
 
 /**
@@ -121,7 +121,7 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
     return (
       <img
         style={style}
-        src={numbersSvg}
+        src={meditatorSvg}
         className={styles.fadeInImage}
         alt="This disappears and reappears"
       />
@@ -130,7 +130,7 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
     return (
       <img
         style={style}
-        src={numbersSvg}
+        src={meditatorSvg}
         className={styles.opaqueImage}
         alt="This disappears and reappears"
       />
@@ -138,7 +138,7 @@ function DisappearingImage(props: { curTime: number; image: ImageProps }) {
   } else {
     return (
       <img
-        src={numbersSvg}
+        src={meditatorSvg}
         className={styles.transparentImage}
         alt="This disappears and reappears"
       />

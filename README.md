@@ -5,9 +5,18 @@ An app I made for myself that might be useful to others who want to play with
 
 I still need to
 
-- put attribution for the pictures
+- Add attribution for the pictures
 - create settings and about pages
 - Make it look nicer (the play and pause button are pretty ugly)
+- Add automated tests
+
+It would be nice to
+
+- Have more sets of images
+- Translate all text
+- Have several quick presets for the settings
+- Allow a correlated mixture distribution for disappearance intervals - to allow
+  for "runs" interspersed with slow "Gone" events
 
 All the SVGs came from Wikimedia Commons.
 

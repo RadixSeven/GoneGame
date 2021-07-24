@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppDispatch, AppThunk, RootState } from "../../app/store";
+import { AppThunk, RootState } from "../../app/store";
 import {
   fetchCount,
   lognormal_sample,
   randomOverlappingPosition,
-  waitMilliseconds,
   waitRandomTime,
 } from "./counterAPI";
 import * as R from "ramda";
@@ -237,30 +236,6 @@ function timeOfNextEvent(currentTime: number, images: ImageProps[]): number {
   return getEarliestTime(images);
 }
 
-/**
- * Return the time until the next event after currentTime (in milliseconds)
- * @param currentTime The current time
- * @param images The images that are changing
- */
-function timeUntilNextEvent(currentTime: number, images: ImageProps[]): number {
-  return timeOfNextEvent(currentTime, images) - currentTime;
-}
-
-export const millisecondsPassed = createAsyncThunk<
-  { newImages: ImageProps[]; newTime: number },
-  { numMs: number },
-  { dispatch: AppDispatch; state: RootState }
->("counter/millisecondsPassed", async (arg: { numMs: number }, thunkAPI) => {
-  await waitMilliseconds(arg.numMs);
-  const newTime = arg.numMs + getCurrentTime(thunkAPI.getState());
-  const gp = getGenerationParams(thunkAPI.getState());
-  const newImages = fillUpImages(newTime, getImages(thunkAPI.getState()), gp);
-  thunkAPI.dispatch(
-    millisecondsPassed({ numMs: timeUntilNextEvent(newTime, newImages) })
-  );
-  return { newImages: newImages, newTime: newTime };
-});
-
 export const autoIncrement2 = createAsyncThunk(
   "counter/autoIncrement",
   async (arg: { amount: number; numTimes: number }, thunkAPI) => {
@@ -323,11 +298,6 @@ export const counterSlice = createSlice({
         if (action.payload.numTimes >= 1) {
           state.value += action.payload.amount;
         }
-      })
-      .addCase(millisecondsPassed.pending, () => {})
-      .addCase(millisecondsPassed.fulfilled, (state, action) => {
-        state.currentTime = action.payload.newTime;
-        state.images = action.payload.newImages;
       });
   },
 });
@@ -357,9 +327,6 @@ export const getSimulationIsRunning = (state: RootState) =>
 export const getImages = (state: RootState) => state.counter.images;
 
 export const getCurrentTime = (state: RootState) => state.counter.currentTime;
-
-export const getGenerationParams = (state: RootState) =>
-  state.counter.generationParams;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

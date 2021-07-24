@@ -97,7 +97,3 @@ export function waitRandomTime(base: number, mean: number, std: number) {
     setTimeout(() => resolve(), ms_to_wait)
   );
 }
-
-export function waitMilliseconds(msToWait: number) {
-  return new Promise<void>((resolve) => setTimeout(() => resolve(), msToWait));
-}

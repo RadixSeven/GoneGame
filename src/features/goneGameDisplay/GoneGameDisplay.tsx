@@ -82,18 +82,27 @@ export function GoneGameDisplay() {
         {simulationIsRunning ? <PauseButton /> : <PlayButton />}
       </div>
       <div className={styles.row}>
-        {R.reverse(images)
-          .filter((i) => i.timeToStartFadeIn <= curTime)
-          .filter((i) => curTime < i.timeToDisappear)
-          .map((i: ImageProps, idx, arr) => (
-            <DisappearingImage
-              key={i.key}
-              curTime={curTime}
-              image={i}
-              imageWidth={imageWidth(window.width)}
-              isHighlighted={idx + 1 === arr.length}
-            />
-          ))}
+        {(() => {
+          const sortedImages = R.reverse(
+            R.sortBy<ImageProps>(
+              (i) => i.timeToDisappear,
+              images.filter((i) => curTime < i.timeToDisappear)
+            )
+          );
+          const highlighted = R.last(sortedImages);
+          const highlightedKey = highlighted ? highlighted.key : undefined;
+          return sortedImages
+            .filter((i) => i.timeToStartFadeIn <= curTime)
+            .map((i: ImageProps) => (
+              <DisappearingImage
+                key={i.key}
+                curTime={curTime}
+                image={i}
+                imageWidth={imageWidth(window.width)}
+                isHighlighted={i.key === highlightedKey}
+              />
+            ));
+        })()}
       </div>
     </div>
   );

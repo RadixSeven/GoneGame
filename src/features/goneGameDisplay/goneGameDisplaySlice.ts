@@ -84,8 +84,8 @@ const initialState: GameState = {
   },
   generationParams: {
     timeBetweenDisappearances: { min: 500, mean: 4000, std: 1000 },
-    fadeInTime: { min: 500, mean: 2500, std: 2500 },
-    opaqueTime: { min: 100, mean: 4000, std: 2000 },
+    fadeInTime: { min: 2000, mean: 3500, std: 500 },
+    opaqueTime: { min: 2000, mean: 6000, std: 2000 },
     numGlyphs: glyphs.length,
   },
 };
